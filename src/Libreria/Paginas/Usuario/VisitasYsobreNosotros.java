@@ -15,63 +15,76 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class VisitasYsobreNosotros {
+
+    private JFrame frame;
+    private JPanel header;
+    private JPanel body;
+    private Color miColor;
+    private CitasManager citasManager;
+
     public VisitasYsobreNosotros() {
-        // Creación del marco principal
-        JFrame frame = new JFrame("Bibliopolis");
+        initFrame();
+        initHeader();
+        initBody();
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    private void initFrame() {
+        frame = new JFrame("Bibliopolis");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(900, 600));
         frame.setResizable(false);
         frame.setLayout(new BorderLayout());
+    }
 
-        // Header
-        JPanel header = new JPanel();
+    private void initHeader() {
+        header = new JPanel();
         header.setBackground(Color.BLACK);
         header.setLayout(new BorderLayout());
         header.setPreferredSize(new Dimension(700, 100));
 
-        // Logo
+        JPanel headerPanel = createHeaderPanel();
+        header.add(headerPanel, BorderLayout.CENTER);
+
+        frame.add(header, BorderLayout.NORTH);
+    }
+
+    private JPanel createHeaderPanel() {
+        JLabel etiquetaFoto1 = createLogoLabel();
+        JPanel grupoBotones = createMenuButtonsPanel();
+
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(Color.BLACK);
+        headerPanel.add(grupoBotones, BorderLayout.CENTER);
+        headerPanel.add(etiquetaFoto1, BorderLayout.WEST);
+
+        return headerPanel;
+    }
+
+    private JLabel createLogoLabel() {
         ImageIcon logo = new ImageIcon("src/Libreria/imagenes/logo_blanco.png");
         JLabel etiquetaFoto1 = new JLabel(logo);
         etiquetaFoto1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        etiquetaFoto1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                frame.dispose();
+                new UserMainPage();
+            }
+        });
+        return etiquetaFoto1;
+    }
 
-        // Etiquetas del menú
-        JLabel ayuda = new JLabel("Ayuda con...");
-        JLabel colecciones = new JLabel("Colecciones");
-        JLabel eventosYNoticias = new JLabel("Eventos y Noticias");
-        JLabel sobreNosotros = new JLabel("Visitas y Sobre nosotros");
-
-        // Icono del usuario en el encabezado a la derecha
-        ImageIcon userLogedIcon = new ImageIcon("src/Libreria/imagenes/user_icon_white_resize.png");
-        JLabel inicioSesion = new JLabel(userLogedIcon);
-
-        // Texto debajo del icono del usuario
-        JLabel underUser = new JLabel("User");
-
-        // Panel donde se encuentran el icono del usuario y el nombre del usuario
-        JPanel vertical = new JPanel();
-        vertical.setLayout(new BoxLayout(vertical, BoxLayout.Y_AXIS));
-        vertical.setLayout(new FlowLayout());
-        vertical.setPreferredSize(new Dimension(50, 50));
-        vertical.setBackground(Color.BLACK);
-        vertical.add(inicioSesion);
-        vertical.add(underUser);
-
-        // Poner la letra de la página seleccionada en blanco
+    private JPanel createMenuButtonsPanel() {
+        JLabel ayuda = createMenuLabel("Ayuda con...");
+        JLabel colecciones = createMenuLabel("Colecciones");
+        JLabel eventosYNoticias = createMenuLabel("Eventos y Noticias");
+        JLabel sobreNosotros = createMenuLabel("Visitas y Sobre nosotros");
         sobreNosotros.setForeground(Color.WHITE);
 
-        // Configuración de fuentes y cursores
-        Font font = new Font("Arial", Font.BOLD, 14);
-        Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-        ayuda.setFont(font);
-        ayuda.setCursor(handCursor);
-        colecciones.setFont(font);
-        colecciones.setCursor(handCursor);
-        eventosYNoticias.setFont(font);
-        eventosYNoticias.setCursor(handCursor);
-        sobreNosotros.setFont(font);
-        sobreNosotros.setCursor(handCursor);
+        JPanel vertical = createUserIconPanel();
 
-        // Panel de botones del menú
         JPanel grupoBotones = new JPanel();
         grupoBotones.setBackground(Color.BLACK);
         grupoBotones.setLayout(new BoxLayout(grupoBotones, BoxLayout.X_AXIS));
@@ -87,14 +100,34 @@ public class VisitasYsobreNosotros {
         grupoBotones.add(Box.createHorizontalStrut(70));
         grupoBotones.add(vertical);
 
-        // Panel de encabezado que contiene el logo y los botones del menú
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(Color.BLACK);
-        headerPanel.add(grupoBotones, BorderLayout.CENTER);
-        headerPanel.add(etiquetaFoto1, BorderLayout.WEST);
-        header.add(headerPanel, BorderLayout.CENTER);
+        addMenuListeners(ayuda, colecciones, eventosYNoticias, sobreNosotros);
 
-        // Añadir MouseListeners a los JLabels
+        return grupoBotones;
+    }
+
+    private JPanel createUserIconPanel() {
+        ImageIcon userLogedIcon = new ImageIcon("src/Libreria/imagenes/user_icon_white_resize.png");
+        JLabel inicioSesion = new JLabel(userLogedIcon);
+        JLabel underUser = new JLabel("User");
+
+        JPanel vertical = new JPanel();
+        vertical.setLayout(new FlowLayout());
+        vertical.setPreferredSize(new Dimension(50, 50));
+        vertical.setBackground(Color.BLACK);
+        vertical.add(inicioSesion);
+        vertical.add(underUser);
+
+        return vertical;
+    }
+
+    private JLabel createMenuLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.BOLD, 14));
+        label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return label;
+    }
+
+    private void addMenuListeners(JLabel ayuda, JLabel colecciones, JLabel eventosYNoticias, JLabel sobreNosotros) {
         ayuda.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -113,7 +146,7 @@ public class VisitasYsobreNosotros {
             @Override
             public void mouseClicked(MouseEvent e) {
                 frame.dispose();
-                EventosYnoticias eventosYnoticias = new EventosYnoticias();
+                new EventosYnoticias();
             }
         });
 
@@ -121,56 +154,57 @@ public class VisitasYsobreNosotros {
             @Override
             public void mouseClicked(MouseEvent e) {
                 frame.dispose();
-                VisitasYsobreNosotros visitasYsobreNosotros = new VisitasYsobreNosotros();
+                new VisitasYsobreNosotros();
             }
         });
+    }
 
-        etiquetaFoto1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                frame.dispose();
-                UserMainPage visitasYsobreNosotros = new UserMainPage();
-            }
-        });
+    private void initBody() {
+        body = new JPanel(new GridLayout(2, 1));
+        miColor = new Color(210, 210, 210);
 
-        //============[ CUERPO PRINCIPAL ]=======================================================
+        JPanel programarVisitaPanel = createProgramarVisitaPanel();
+        body.add(programarVisitaPanel);
 
-        JPanel body = new JPanel(new GridLayout(2, 1));
+        JPanel panelAdicional = createPanelAdicional();
+        body.add(panelAdicional);
 
-        //----[ Programar Visita ]-----------------------------------------------------------------------------
-        //color
-        int red = 210;
-        int green = 210;
-        int blue = 210;
-        Color miColor = new Color(red, green, blue);
+        frame.add(body, BorderLayout.CENTER);
+    }
 
-        JPanel ProgramarVisita = new JPanel(new BorderLayout());
-        ProgramarVisita.setBackground(miColor);
-        // Ajuste de los márgenes a 30 píxeles
-        ProgramarVisita.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+    private JPanel createProgramarVisitaPanel() {
+        JPanel programarVisita = new JPanel(new BorderLayout());
+        programarVisita.setBackground(miColor);
+        programarVisita.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        // Subpanel para contenido de ProgramarVisita
+        JPanel subPanel = createSubPanel();
+        programarVisita.add(subPanel, BorderLayout.CENTER);
+
+        return programarVisita;
+    }
+
+    private JPanel createSubPanel() {
         JPanel subPanel = new JPanel(new BorderLayout());
         subPanel.setBackground(Color.WHITE);
-        ProgramarVisita.add(subPanel, BorderLayout.CENTER);
 
-        // Subpanel para información de noticias
-        JPanel noticiasInfoPanel = new JPanel(new GridLayout(0, 1)); // GridLayout para organizar los componentes verticalmente
+        JPanel noticiasInfoPanel = new JPanel(new GridLayout(0, 1));
         subPanel.add(noticiasInfoPanel, BorderLayout.CENTER);
 
-        //titulo
+        addProgramarVisitaComponents(noticiasInfoPanel);
+
+        return subPanel;
+    }
+
+    private void addProgramarVisitaComponents(JPanel noticiasInfoPanel) {
         JLabel tituloProgramarVisita = new JLabel("Programar una visita");
         tituloProgramarVisita.setHorizontalAlignment(SwingConstants.CENTER);
         tituloProgramarVisita.setFont(new Font("Arial", Font.BOLD, 28));
-        // Ajuste de los márgenes laterales a 30 píxeles
         tituloProgramarVisita.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
         noticiasInfoPanel.add(tituloProgramarVisita);
 
-        // Etiquetas del busqueda y programacion de una visita
         JLabel correoLabel = new JLabel("Correo electrónico:");
         noticiasInfoPanel.add(correoLabel);
 
-        // Área de texto del usuario y la contraseña
         JTextField correoText = new JTextField(10);
         TextPrompt placeholder1 = new TextPrompt("example@gmail.com", correoText);
         placeholder1.changeAlpha(0.75f);
@@ -178,26 +212,22 @@ public class VisitasYsobreNosotros {
         noticiasInfoPanel.add(correoText);
 
         JLabel fechaLabel = new JLabel("Fecha:");
+        noticiasInfoPanel.add(fechaLabel);
 
-// Selector de fecha JXDatePicker
         JXDatePicker datePicker = new JXDatePicker();
         datePicker.setDate(Calendar.getInstance().getTime());
         datePicker.setFormats(new SimpleDateFormat("yyyy/MM/dd"));
-
-// Agrega los componentes al panel
-        noticiasInfoPanel.add(fechaLabel);
         noticiasInfoPanel.add(datePicker);
 
-        // Botón de busqueda
         JButton reservarButton = new JButton("Reservar visita");
         reservarButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         noticiasInfoPanel.add(reservarButton);
 
-        // Crear una instancia de CitasManager
-        CitasManager citasManager = new CitasManager();
+        citasManager = new CitasManager();
+        addReservarButtonListener(reservarButton, correoText, datePicker);
+    }
 
-        // Añadir el ActionListener al botón de reservar
-
+    private void addReservarButtonListener(JButton reservarButton, JTextField correoText, JXDatePicker datePicker) {
         reservarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -213,68 +243,55 @@ public class VisitasYsobreNosotros {
                 }
             }
         });
+    }
 
-
-        body.add(ProgramarVisita);
-
-        //----[ PANEL ADICIONAL ]---------------------------------------------------------------------
+    private JPanel createPanelAdicional() {
         JPanel panelAdicional = new JPanel(new BorderLayout());
         panelAdicional.setBackground(miColor);
-        panelAdicional.setBorder(BorderFactory.createEmptyBorder(20, 30, 30, 30)); // Añadir margen
+        panelAdicional.setBorder(BorderFactory.createEmptyBorder(20, 30, 30, 30));
 
-        // Título del panel adicional
         JLabel tituloPanelAdicional = new JLabel("Sobre nosotros");
         tituloPanelAdicional.setHorizontalAlignment(SwingConstants.CENTER);
         tituloPanelAdicional.setFont(new Font("Arial", Font.BOLD, 28));
         panelAdicional.add(tituloPanelAdicional, BorderLayout.NORTH);
 
-        // Subpanel para contenido del panel adicional
-        JPanel contenidoPanelAdicional = new JPanel();
-        contenidoPanelAdicional.setBackground(Color.WHITE); // Color de fondo para distinguirlo
-        panelAdicional.add(contenidoPanelAdicional, BorderLayout.CENTER); // Agregar el subpanel al panel adicional
+        JPanel contenidoPanelAdicional = createContenidoPanelAdicional();
+        panelAdicional.add(contenidoPanelAdicional, BorderLayout.CENTER);
 
-        // Subtítulo del panel adicional
+        return panelAdicional;
+    }
+
+    private JPanel createContenidoPanelAdicional() {
+        JPanel contenidoPanelAdicional = new JPanel();
+        contenidoPanelAdicional.setBackground(Color.WHITE);
+
         JLabel subtituloPanelAdicional = new JLabel("<html><div style='text-align: center; width: 300px;'>Bibliopolis es una innovadora aplicación diseñada para satisfacer las necesidades de bibliotecas y librerías de todo el mundo. Con una interfaz intuitiva y funciones avanzadas, Bibliopolis simplifica la gestión de libros, préstamos, eventos y más. Desde pequeñas bibliotecas comunitarias hasta grandes librerías, nuestra plataforma ofrece soluciones adaptadas a cada necesidad. ¡Únete a nosotros y lleva tu biblioteca al siguiente nivel con Bibliopolis!</div></html>");
         subtituloPanelAdicional.setHorizontalAlignment(SwingConstants.CENTER);
         subtituloPanelAdicional.setFont(new Font("Centaur", Font.BOLD, 14));
         contenidoPanelAdicional.add(subtituloPanelAdicional, BorderLayout.NORTH);
 
-
-        // Panel contenedor para contenido adicional
         JPanel containerPanelAdicional = new JPanel();
         containerPanelAdicional.setBackground(Color.LIGHT_GRAY);
-        containerPanelAdicional.setPreferredSize(new Dimension(300, 350)); // Establecer tamaño inicial
-        containerPanelAdicional.setMinimumSize(new Dimension(300, 350)); // Establecer tamaño mínimo
-
+        containerPanelAdicional.setPreferredSize(new Dimension(300, 350));
+        containerPanelAdicional.setMinimumSize(new Dimension(300, 350));
         containerPanelAdicional.setLayout(new BoxLayout(containerPanelAdicional, BoxLayout.Y_AXIS));
 
-        // Número de paneles a crear
-        JPanel[] panelAdicionalPanels = new JPanel[4];
+        addAdditionalPanels(containerPanelAdicional);
 
-        // Crear y agregar los paneles al contenedor del panel adicional
+        return contenidoPanelAdicional;
+    }
+
+    private void addAdditionalPanels(JPanel containerPanelAdicional) {
+        JPanel[] panelAdicionalPanels = new JPanel[4];
         for (int i = 0; i < panelAdicionalPanels.length; i++) {
             panelAdicionalPanels[i] = new JPanel();
             panelAdicionalPanels[i].setBackground(miColor);
             panelAdicionalPanels[i].setBorder(BorderFactory.createBevelBorder(1, Color.WHITE, Color.WHITE));
             containerPanelAdicional.add(panelAdicionalPanels[i]);
         }
-
-        body.add(panelAdicional);
-
-        //========[ CUERPO PRINCIPAL ]=================================================================
-
-        // Añadir el panel body al marco principal
-        frame.add(body, BorderLayout.CENTER);
-
-        // Añadir el panel header al marco principal
-        frame.add(header, BorderLayout.NORTH);
-
-        // Hacer visible el marco principal
-        frame.pack();
-        frame.setVisible(true);
     }
 
     public static void main(String[] args) {
-        VisitasYsobreNosotros visitasYsobreNosotros = new VisitasYsobreNosotros();
+        new VisitasYsobreNosotros();
     }
 }
