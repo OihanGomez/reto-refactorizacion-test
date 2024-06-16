@@ -171,7 +171,7 @@ public class RegisterPage {
                 } else if (!password.equals(confirmPassword)) {
                         JOptionPane.showMessageDialog(frame, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
                 } else if (registerManager.register(email, password, name, lastName, address)) {
-                        UserMainPage userMainPage = new UserMainPage();
+                        new UserMainPage();
                         frame.dispose();
                 }
         }
