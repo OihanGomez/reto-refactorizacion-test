@@ -16,7 +16,7 @@ import java.util.Date;
 
 public class VisitasYsobreNosotros {
 
-    private JFrame frame;
+    protected JFrame frame;
     private JPanel header;
     private JPanel body;
     private Color miColor;
@@ -50,7 +50,7 @@ public class VisitasYsobreNosotros {
         frame.add(header, BorderLayout.NORTH);
     }
 
-    private JPanel createHeaderPanel() {
+    protected JPanel createHeaderPanel() {
         JLabel etiquetaFoto1 = createLogoLabel();
         JPanel grupoBotones = createMenuButtonsPanel();
 
@@ -62,7 +62,7 @@ public class VisitasYsobreNosotros {
         return headerPanel;
     }
 
-    private JLabel createLogoLabel() {
+    protected JLabel createLogoLabel() {
         ImageIcon logo = new ImageIcon("src/Libreria/imagenes/logo_blanco.png");
         JLabel etiquetaFoto1 = new JLabel(logo);
         etiquetaFoto1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -76,7 +76,7 @@ public class VisitasYsobreNosotros {
         return etiquetaFoto1;
     }
 
-    private JPanel createMenuButtonsPanel() {
+    protected JPanel createMenuButtonsPanel() {
         JLabel ayuda = createMenuLabel("Ayuda con...");
         JLabel colecciones = createMenuLabel("Colecciones");
         JLabel eventosYNoticias = createMenuLabel("Eventos y Noticias");
@@ -120,14 +120,14 @@ public class VisitasYsobreNosotros {
         return vertical;
     }
 
-    private JLabel createMenuLabel(String text) {
+    protected JLabel createMenuLabel(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Arial", Font.BOLD, 14));
         label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return label;
     }
 
-    private void addMenuListeners(JLabel ayuda, JLabel colecciones, JLabel eventosYNoticias, JLabel sobreNosotros) {
+    protected void addMenuListeners(JLabel ayuda, JLabel colecciones, JLabel eventosYNoticias, JLabel sobreNosotros) {
         ayuda.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
