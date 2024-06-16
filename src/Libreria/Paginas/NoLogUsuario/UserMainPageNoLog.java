@@ -1,13 +1,11 @@
-package Libreria.Paginas;
-
-import Libreria.Paginas.Usuario.UserMainPage;
+package Libreria.Paginas.NoLogUsuario;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Principal extends UserMainPage {
+public class UserMainPageNoLog extends Libreria.Paginas.Usuario.UserMainPage {
 
     @Override
     protected JPanel createHeader() {
@@ -28,7 +26,7 @@ public class Principal extends UserMainPage {
             @Override
             public void mouseClicked(MouseEvent e) {
                 frame.dispose();
-                new UserMainPage();
+                new Libreria.Paginas.Usuario.UserMainPage();
             }
         });
 
@@ -36,6 +34,6 @@ public class Principal extends UserMainPage {
     }
 
     public static void main(String[] args) {
-        new Principal();
+        new UserMainPageNoLog();
     }
 }
