@@ -1,7 +1,11 @@
 package Libreria.Acciones;
 
-import java.sql.*;
-import java.util.Objects;
+import Libreria.objetos.Usuario;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginManager {
     private Connection conexion;
@@ -10,44 +14,34 @@ public class LoginManager {
         this.conexion = conexionBD.getConexion();
     }
 
-    public boolean login(String email, String contrasena) {
-        String query = "SELECT * FROM usuarios WHERE email = ? AND contrasena = ?";
+    public Usuario buscarUsuario(String email) {
+        String query = "SELECT * FROM usuarios WHERE email = ?";
         try (PreparedStatement statement = conexion.prepareStatement(query)) {
             statement.setString(1, email);
-            statement.setString(2, contrasena);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    System.out.println("¡Inicio de sesión exitoso para " + email + "!");
-                    return true;
-                } else {
-                    System.out.println("Email o contraseña incorrectos.");
-                    return false;
+                    int idUsuario = resultSet.getInt("idUsuario");
+                    String direccion = resultSet.getString("direccion");
+                    String apellidos = resultSet.getString("apellidos");
+                    String nombre = resultSet.getString("nombre");
+                    boolean admin = resultSet.getString("admin").equals("Y");
+                    String contrasena = resultSet.getString("contrasena");
+
+                    return new Usuario(idUsuario, direccion, apellidos, nombre, email, admin, contrasena);
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public boolean isAdmin(String email) {
-        String query = "SELECT admin FROM usuarios WHERE email = ?";
-
-        try (PreparedStatement statement = conexion.prepareStatement(query)) {
-            statement.setString(1, email);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    String admin = resultSet.getString("admin");
-                    return admin.equals("Y");
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error al buscar usuario en la base de datos", e);
         }
 
-        return false;
+        return null;
     }
 
-
+    public boolean login(Usuario usuario, String inputPassword) {
+        if (usuario.getContrasena().equals(inputPassword)){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }
