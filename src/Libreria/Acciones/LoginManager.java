@@ -38,10 +38,6 @@ public class LoginManager {
     }
 
     public boolean login(Usuario usuario, String inputPassword) {
-        if (usuario.getContrasena().equals(inputPassword)){
-            return true;
-        }else {
-            return false;
-        }
+        return usuario.getContrasena().equals(inputPassword);
     }
 }
