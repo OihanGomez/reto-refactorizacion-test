@@ -14,7 +14,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 
 public class UserMainPage {
-    private JFrame frame;
+    protected JFrame frame;
     private JPanel panelIzquerda;
     private JTextField buscadorTexto;
 
@@ -86,7 +86,7 @@ public class UserMainPage {
         return grupoBotones;
     }
 
-    private JLabel createHeaderButton(String text) {
+    protected JLabel createHeaderButton(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(Color.WHITE);
         label.setFont(new Font("Arial", Font.BOLD, 14));
@@ -95,7 +95,7 @@ public class UserMainPage {
         return label;
     }
 
-    private JPanel createUserPanel() {
+    protected JPanel createUserPanel() {
         JPanel vertical = new JPanel();
         vertical.setLayout(new BoxLayout(vertical, BoxLayout.Y_AXIS));
         vertical.setLayout(new FlowLayout());
