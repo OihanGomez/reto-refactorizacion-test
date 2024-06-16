@@ -35,7 +35,7 @@ public class UserMainPage {
         return frame;
     }
 
-    private JPanel createHeader() {
+    protected JPanel createHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(Color.BLACK);
         header.setPreferredSize(new Dimension(700,100));
@@ -60,14 +60,14 @@ public class UserMainPage {
         return header;
     }
 
-    private JLabel createLabelWithIcon(String path) {
+    protected JLabel createLabelWithIcon(String path) {
         ImageIcon icon = new ImageIcon(path);
         JLabel label = new JLabel(icon);
         label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return label;
     }
 
-    private JPanel createHeaderButtons(String[] buttonNames) {
+    protected JPanel createHeaderButtons(String[] buttonNames) {
         JPanel grupoBotones = new JPanel();
         grupoBotones.setBackground(Color.BLACK);
         grupoBotones.setLayout(new BoxLayout(grupoBotones, BoxLayout.X_AXIS));
