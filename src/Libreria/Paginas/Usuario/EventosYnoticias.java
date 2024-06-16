@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 
 public class EventosYnoticias {
 
-    private JFrame frame;
+    protected JFrame frame;
 
     public EventosYnoticias(){
         initializeFrame();
@@ -29,7 +29,7 @@ public class EventosYnoticias {
         frame.setLayout(new BorderLayout());
     }
 
-    private JPanel createHeader() {
+    protected JPanel createHeader() {
         JPanel header = new JPanel();
         header.setBackground(Color.BLACK);
         header.setLayout(new BorderLayout());
@@ -47,7 +47,7 @@ public class EventosYnoticias {
         return header;
     }
 
-    private JLabel createLogoLabel() {
+    protected JLabel createLogoLabel() {
         ImageIcon logo = new ImageIcon("src/Libreria/imagenes/logo_blanco.png");
         JLabel etiquetaFoto1 = new JLabel(logo);
         etiquetaFoto1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -61,7 +61,7 @@ public class EventosYnoticias {
         return etiquetaFoto1;
     }
 
-    private JPanel createMenuButtons() {
+    protected JPanel createMenuButtons() {
         JLabel ayuda = createMenuLabel("Ayuda con...");
         JLabel colecciones = createMenuLabel("Colecciones");
         JLabel eventosYNoticias = createMenuLabel("Eventos y Noticias");
@@ -99,7 +99,7 @@ public class EventosYnoticias {
         return grupoBotones;
     }
 
-    private JLabel createMenuLabel(String text) {
+    protected JLabel createMenuLabel(String text) {
         JLabel label = new JLabel(text);
         Font font = new Font("Arial", Font.BOLD, 14);
         label.setFont(font);
@@ -107,7 +107,7 @@ public class EventosYnoticias {
         return label;
     }
 
-    private JLabel createUserIconLabel() {
+    protected JLabel createUserIconLabel() {
         ImageIcon userLogedIcon = new ImageIcon("src/Libreria/imagenes/user_icon_white_resize.png");
         JLabel inicioSesion = new JLabel(userLogedIcon);
         inicioSesion.setFont(new Font("Arial", Font.BOLD, 14));
@@ -115,7 +115,7 @@ public class EventosYnoticias {
         return inicioSesion;
     }
 
-    private JPanel createVerticalPanel(JLabel inicioSesion, JLabel underUser) {
+    protected JPanel createVerticalPanel(JLabel inicioSesion, JLabel underUser) {
         JPanel vertical = new JPanel();
         vertical.setLayout(new BoxLayout(vertical, BoxLayout.Y_AXIS));
         vertical.setLayout(new FlowLayout());
@@ -126,7 +126,7 @@ public class EventosYnoticias {
         return vertical;
     }
 
-    private void addMenuListeners(JLabel ayuda, JLabel colecciones, JLabel eventosYNoticias, JLabel sobreNosotros) {
+    protected void addMenuListeners(JLabel ayuda, JLabel colecciones, JLabel eventosYNoticias, JLabel sobreNosotros) {
         ayuda.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
