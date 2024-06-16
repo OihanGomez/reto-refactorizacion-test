@@ -2,6 +2,7 @@ package Libreria.Paginas.Usuario;
 
 import Libreria.Acciones.CitasManager;
 import Libreria.Paginas.TextPrompt;
+import Libreria.objetos.Cita;
 import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
@@ -11,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -232,11 +235,10 @@ public class VisitasYsobreNosotros {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String email = correoText.getText();
-                Date fecha = datePicker.getDate();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                String fechaStr = sdf.format(fecha);
+                LocalDate fecha = datePicker.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); // Convertir Date a LocalDate
+
                 try {
-                    citasManager.reservarCita(email, fechaStr);
+                    citasManager.reservarCita(new Cita(email, fecha));
                     JOptionPane.showMessageDialog(null, "Cita reservada exitosamente.");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
