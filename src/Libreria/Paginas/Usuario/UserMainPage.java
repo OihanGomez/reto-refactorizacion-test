@@ -40,8 +40,9 @@ public class UserMainPage {
         header.setBackground(Color.BLACK);
         header.setPreferredSize(new Dimension(700,100));
 
+        String[] buttonNames = {"Ayuda con...", "Colecciones", "Eventos y Noticias", "Visitas y Sobre nosotros"};
         JLabel etiquetaFoto1 = createLabelWithIcon("src/Libreria/imagenes/logo_blanco.png");
-        JPanel grupoBotones = createHeaderButtons();
+        JPanel grupoBotones = createHeaderButtons(buttonNames);
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(Color.BLACK);
         headerPanel.add(grupoBotones, BorderLayout.CENTER);
@@ -66,13 +67,12 @@ public class UserMainPage {
         return label;
     }
 
-    private JPanel createHeaderButtons() {
+    private JPanel createHeaderButtons(String[] buttonNames) {
         JPanel grupoBotones = new JPanel();
         grupoBotones.setBackground(Color.BLACK);
         grupoBotones.setLayout(new BoxLayout(grupoBotones, BoxLayout.X_AXIS));
         grupoBotones.setPreferredSize(new Dimension(200,100));
 
-        String[] buttonNames = {"Ayuda con...", "Colecciones", "Eventos y Noticias", "Visitas y Sobre nosotros"};
         for (String name : buttonNames) {
             JLabel button = createHeaderButton(name);
             grupoBotones.add(button);
