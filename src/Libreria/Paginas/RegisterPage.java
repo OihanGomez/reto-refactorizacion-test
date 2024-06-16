@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 public class RegisterPage {
 
         private JFrame frame;
-        private JTextField añadirCorreo;
+        private JTextField anadirCorreo;
         private JTextField nombreText;
         private JTextField apellidosText;
         private JTextField direccionText;
@@ -53,7 +53,7 @@ public class RegisterPage {
         private void initializeTextFields() {
                 passwordText = new JPasswordField(10);
                 passwordConfirm = new JPasswordField(30);
-                añadirCorreo = new JTextField(30);
+                anadirCorreo = new JTextField(30);
                 nombreText = new JTextField(30);
                 apellidosText = new JTextField(30);
                 direccionText = new JTextField(30);
@@ -68,7 +68,7 @@ public class RegisterPage {
         private void initializePlaceholders() {
                 createPlaceholder(passwordText, "Ingresa tu contraseña", 50, 115);
                 createPlaceholder(passwordConfirm, "Confirma tu contraseña", 50, 175);
-                createPlaceholder(añadirCorreo, "Ingresa tu correo electrónico", 50, 235);
+                createPlaceholder(anadirCorreo, "Ingresa tu correo electrónico", 50, 235);
                 createPlaceholder(nombreText, "Ingresa tu nombre", 50, 295);
                 createPlaceholder(apellidosText, "Ingresa tus apellidos", 50, 355);
                 createPlaceholder(direccionText, "Ingresa tu dirección", 50, 415);
@@ -143,7 +143,7 @@ public class RegisterPage {
         private void addTextFieldsToPanel(JPanel panel) {
                 panel.add(passwordText);
                 panel.add(passwordConfirm);
-                panel.add(añadirCorreo);
+                panel.add(anadirCorreo);
                 panel.add(nombreText);
                 panel.add(apellidosText);
                 panel.add(direccionText);
@@ -161,7 +161,7 @@ public class RegisterPage {
         private void handleRegister() {
                 String password = new String(passwordText.getPassword());
                 String confirmPassword = new String(passwordConfirm.getPassword());
-                String email = añadirCorreo.getText();
+                String email = anadirCorreo.getText();
                 String name = nombreText.getText();
                 String lastName = apellidosText.getText();
                 String address = direccionText.getText();
