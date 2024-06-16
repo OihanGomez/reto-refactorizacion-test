@@ -4,6 +4,7 @@ import Libreria.Acciones.ConexionBD;
 import Libreria.Acciones.LoginManager;
 import Libreria.Paginas.Admin.AdminMainPage;
 import Libreria.Paginas.Usuario.UserMainPage;
+import Libreria.objetos.Usuario;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -124,22 +125,26 @@ public class Login {
 
     private void handleLogin() {
         String email = userText.getText();
-        String password = passwordText.getText();
+        String password = new String(passwordText.getPassword()); // Obtener la contraseña como String
+
         ConexionBD conexionBD = new ConexionBD();
         LoginManager loginManager = new LoginManager(conexionBD);
+        Usuario usuario = loginManager.buscarUsuario(email);
 
-        boolean estaLogueado = loginManager.login(email, password);
-        boolean esAdmin = loginManager.isAdmin(email);
-        if (estaLogueado && esAdmin){
+        boolean estaLogueado = loginManager.login(usuario, password);
+        boolean esAdmin = usuario.isAdmin();
+
+        if (estaLogueado && esAdmin) {
             frame.dispose();
-            AdminMainPage adminMainPage = new AdminMainPage();
-        }else if (estaLogueado){
+            new AdminMainPage();
+        } else if (estaLogueado) {
             frame.dispose();
-            UserMainPage userMainPage = new UserMainPage();
-        }else {
-            JOptionPane.showMessageDialog(frame,"Credenciales incorrectas. Por favor, inténtalo de nuevo.", "Error de inicio de sesión", JOptionPane.ERROR_MESSAGE);
+            new UserMainPage();
+        } else {
+            JOptionPane.showMessageDialog(frame, "Credenciales incorrectas. Por favor, inténtalo de nuevo.", "Error de inicio de sesión", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     private void configureRegisterButton() {
         regist.addMouseListener(new MouseAdapter() {
