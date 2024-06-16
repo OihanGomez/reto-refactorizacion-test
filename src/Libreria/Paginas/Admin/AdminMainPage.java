@@ -2,6 +2,7 @@ package Libreria.Paginas.Admin;
 
 import Libreria.Acciones.AdminManagement;
 import Libreria.Acciones.ConexionBD;
+import Libreria.objetos.Usuario;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -14,7 +15,7 @@ public class AdminMainPage {
     private JFrame frame;
     private JPanel header;
     private JPanel panelEdit;
-    private JComboBox<String> comboBox;
+    private JComboBox<Usuario> comboBox;
     private JTextField direccion;
     private JTextField nombre;
     private JTextField apellido;
@@ -174,31 +175,36 @@ public class AdminMainPage {
         adminManagement.mostrarUsuarios(comboBox);
     }
 
+
     private void setupAceptarEditListener() {
-        JLabel aceptarEdit = (JLabel) panelEdit.getComponent(6); // Adjust index as needed
+        JLabel aceptarEdit = (JLabel) panelEdit.getComponent(6); // Ajusta el índice según sea necesario
         aceptarEdit.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String selectedUser = (String) comboBox.getSelectedItem();
+                Usuario selectedUser = (Usuario) comboBox.getSelectedItem();
                 String nuevaDireccion = direccion.getText();
                 String nuevoNombre = nombre.getText();
                 String nuevosApellidos = apellido.getText();
                 String nuevoCorreo = correo.getText();
                 String nuevaContraseña = contraseña.getText();
 
-                if (nuevaDireccion.isEmpty() || nuevoNombre.isEmpty() || nuevosApellidos.isEmpty() || nuevoCorreo.isEmpty() || nuevaContraseña.isEmpty()) {
+                if (selectedUser == null || nuevaDireccion.isEmpty() || nuevoNombre.isEmpty() || nuevosApellidos.isEmpty() || nuevoCorreo.isEmpty() || nuevaContraseña.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Por favor, completa todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
+                    // Actualizamos el objeto Usuario con los nuevos datos
+                    selectedUser.setDireccion(nuevaDireccion);
+                    selectedUser.setNombre(nuevoNombre);
+                    selectedUser.setApellidos(nuevosApellidos);
+                    selectedUser.setEmail(nuevoCorreo);
+                    selectedUser.setContrasena(nuevaContraseña);
+
                     ConexionBD conexionBD = new ConexionBD();
                     AdminManagement adminManagement = new AdminManagement(conexionBD);
-                    adminManagement.actualizarUsuario(selectedUser, nuevaDireccion, nuevoNombre, nuevosApellidos, nuevoCorreo, nuevaContraseña);
+                    adminManagement.actualizarUsuario(selectedUser);
                 }
             }
         });
     }
-
-
-
     public static void main(String[] args) {
         new AdminMainPage();
     }
