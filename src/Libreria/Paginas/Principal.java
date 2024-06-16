@@ -10,28 +10,29 @@ import java.awt.event.MouseEvent;
 public class Principal extends UserMainPage {
 
     @Override
-    protected JPanel createUserPanel() {
-        JPanel vertical = new JPanel();
-        vertical.setLayout(new BoxLayout(vertical, BoxLayout.Y_AXIS));
-        vertical.setLayout(new FlowLayout());
-        vertical.setPreferredSize(new Dimension(70, 50));
-        vertical.setBackground(Color.BLACK);
+    protected JPanel createHeader() {
+        JPanel header = new JPanel(new BorderLayout());
+        header.setBackground(Color.BLACK);
+        header.setPreferredSize(new Dimension(700,100));
 
-        JLabel underUser = new JLabel("Iniciar sesión");
-        underUser.setForeground(Color.WHITE);
-        underUser.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        String[] buttonNames = {"Ayuda con...", "Colecciones", "Eventos y Noticias", "Visitas y Sobre nosotros", "Inicio Sesion"};
+        JLabel etiquetaFoto1 = createLabelWithIcon("src/Libreria/imagenes/logo_blanco.png");
+        JPanel grupoBotones = createHeaderButtons(buttonNames);
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(Color.BLACK);
+        headerPanel.add(grupoBotones, BorderLayout.CENTER);
+        headerPanel.add(etiquetaFoto1, BorderLayout.WEST);
+        header.add(headerPanel, BorderLayout.CENTER);
 
-        // Agregar un listener al label
-        underUser.addMouseListener(new MouseAdapter() {
+        etiquetaFoto1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                new Login();
                 frame.dispose();
+                new UserMainPage();
             }
         });
 
-        vertical.add(underUser);
-        return vertical;
+        return header;
     }
 
     public static void main(String[] args) {
