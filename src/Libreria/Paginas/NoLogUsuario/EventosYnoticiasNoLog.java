@@ -99,9 +99,7 @@ public class EventosYnoticiasNoLog extends EventosYnoticias {
             @Override
             public void mouseClicked(MouseEvent e) {
                 frame.dispose();
-                // Agrega la acción correspondiente para "Iniciar sesión"
-                // Por ejemplo, abrir una ventana de inicio de sesión
-                new Login(); // Supongamos que esta es la clase que maneja la página de inicio de sesión
+                new Login();
             }
         });
     }
