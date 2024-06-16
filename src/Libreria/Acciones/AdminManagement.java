@@ -5,65 +5,52 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JComboBox;
+import Libreria.objetos.Usuario;
 
-/**
- * La clase AdminManagement se encarga de la gestión de la pagina de la administracion.
- */
 public class AdminManagement {
     private Connection conexion;
 
-    /**
-     * Constructor de la clase AdminManagement.
-     *
-     * @param conexion Objeto de tipo ConexionBD que proporciona la conexión a la base de datos.
-     */
     public AdminManagement(ConexionBD conexion) {
         this.conexion = conexion.getConexion();
     }
 
-    /**
-     * Actualiza un JComboBox con los usuarios de la base de datos.
-     *
-     * @param comboBox El JComboBox donde se agregarán los correos electrónicos de los usuarios.
-     */
-    public void mostrarUsuarios(JComboBox<String> comboBox) {
+    public void mostrarUsuarios(JComboBox<Usuario> comboBox) {
         try {
-            PreparedStatement statement = conexion.prepareStatement("SELECT email FROM usuarios");
+            PreparedStatement statement = conexion.prepareStatement("SELECT * FROM usuarios");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                String username = resultSet.getString("email");
-                comboBox.addItem(username);
+                int idUsuario = resultSet.getInt("idUsuario");
+                String direccion = resultSet.getString("direccion");
+                String apellidos = resultSet.getString("apellidos");
+                String nombre = resultSet.getString("nombre");
+                String email = resultSet.getString("email");
+                boolean admin = resultSet.getBoolean("admin");
+                String contrasena = resultSet.getString("contrasena");
+
+                Usuario usuario = new Usuario(idUsuario, direccion, apellidos, nombre, email, admin, contrasena);
+                comboBox.addItem(usuario);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * Actualiza la información de un usuario en la base de datos.
-     *
-     * @param selectedUser El correo electrónico del usuario seleccionado.
-     * @param nuevaDireccion La nueva dirección del usuario.
-     * @param nuevoNombre El nuevo nombre del usuario.
-     * @param nuevosApellidos Los nuevos apellidos del usuario.
-     * @param nuevoCorreo El nuevo correo electrónico del usuario.
-     * @param nuevaContrasena La nueva contraseña del usuario.
-     */
-    public void actualizarUsuario(String selectedUser, String nuevaDireccion, String nuevoNombre, String nuevosApellidos, String nuevoCorreo, String nuevaContrasena) {
+    public void actualizarUsuario(Usuario usuario) {
         try {
-            PreparedStatement statement = conexion.prepareStatement("UPDATE usuarios SET direccion = ?, nombre = ?, apellidos = ?, email = ?, contrasena = ? WHERE email = ?");
-            statement.setString(1, nuevaDireccion);
-            statement.setString(2, nuevoNombre);
-            statement.setString(3, nuevosApellidos);
-            statement.setString(4, nuevoCorreo);
-            statement.setString(5, nuevaContrasena);
-            statement.setString(6, selectedUser);
+            PreparedStatement statement = conexion.prepareStatement("UPDATE usuarios SET direccion = ?, apellidos = ?, nombre = ?, email = ?, admin = ?, contrasena = ? WHERE idUsuario = ?");
+            statement.setString(1, usuario.getDireccion());
+            statement.setString(2, usuario.getApellidos());
+            statement.setString(3, usuario.getNombre());
+            statement.setString(4, usuario.getEmail());
+            statement.setBoolean(5, usuario.isAdmin());
+            statement.setString(6, usuario.getContrasena());
+            statement.setInt(7, usuario.getIdUsuario());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
-                System.out.println("Información actualizada exitosamente para el usuario: " + selectedUser);
+                System.out.println("Información actualizada exitosamente para el usuario con ID: " + usuario.getIdUsuario());
             } else {
-                System.out.println("No se encontró ningún usuario con el nombre de usuario: " + selectedUser);
+                System.out.println("No se encontró ningún usuario con el ID: " + usuario.getIdUsuario());
             }
         } catch (SQLException e) {
             e.printStackTrace();
