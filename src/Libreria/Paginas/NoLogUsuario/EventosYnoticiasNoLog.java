@@ -91,7 +91,7 @@ public class EventosYnoticiasNoLog extends EventosYnoticias {
             @Override
             public void mouseClicked(MouseEvent e) {
                 frame.dispose();
-            new VisitasYsobreNosotros();
+            new VisitasYSobreNosotrosNoLog();
             }
         });
 
