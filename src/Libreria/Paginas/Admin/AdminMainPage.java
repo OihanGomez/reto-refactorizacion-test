@@ -11,71 +11,61 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class AdminMainPage {
+    private JFrame frame;
+    private JPanel header;
+    private JPanel panelEdit;
+    private JComboBox<String> comboBox;
+    private JTextField direccion;
+    private JTextField nombre;
+    private JTextField apellido;
+    private JTextField correo;
+    private JTextField contraseña;
+
     public AdminMainPage() {
-        JFrame frame = new JFrame("Bibliopolis");
+        setupFrame();
+        setupHeader();
+        setupBody();
+        setupComboBox();
+        setupAceptarEditListener();
+    }
+
+    private void setupFrame() {
+        frame = new JFrame("Bibliopolis");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(900, 600));
-
         frame.setResizable(false);
         frame.setLayout(new BorderLayout());
+    }
 
-        //Panel del encabezado
-        JPanel header = new JPanel();
+    private void setupHeader() {
+        header = new JPanel();
         header.setBackground(Color.BLACK);
         header.setLayout(new BorderLayout());
-        header.setPreferredSize(new Dimension(700, 100));
+        header.setPreferredSize(new Dimension(900, 100));
 
-        //Icono del logo en el encabezado a la izquierda
+        setupHeaderLogo();
+        setupHeaderButtons();
+        setupUserPanel();
+        setupHeaderPanel();
+    }
+
+    private void setupHeaderLogo() {
         ImageIcon logo = new ImageIcon("src/Libreria/imagenes/logo_blanco.png");
         JLabel etiquetaFoto1 = new JLabel(logo);
+        header.add(etiquetaFoto1, BorderLayout.WEST);
+    }
 
-        //Botones colocados en el encabezado en el centro
-        JLabel ayuda = new JLabel("Ayuda con...");
-        JLabel colecciones = new JLabel("Colecciones");
-        JLabel eventosYNoticias = new JLabel("Eventos y Noticias");
-        JLabel sobreNosotros = new JLabel("Visitas y Sobre nosotros");
-
-        //Icono de del admin en el encabezado a la derecha
-        ImageIcon userLogedIcon = new ImageIcon(("src/Libreria/imagenes/user_icon_white_resize.png"));
-        JLabel inicioSesion = new JLabel(userLogedIcon);
-
-        //Texto debajo del icono del admin
-        JLabel underUser = new JLabel("Admin");
-
-        //Cambio del color de los botones del encabezado
-        ayuda.setForeground(Color.WHITE);
-        colecciones.setForeground(Color.WHITE);
-        eventosYNoticias.setForeground(Color.WHITE);
-        sobreNosotros.setForeground(Color.WHITE);
-        inicioSesion.setForeground(Color.WHITE);
-        underUser.setForeground(Color.WHITE);
-
-        //Formatos de texto de los botones del encabezado
-        ayuda.setFont(new Font("Arial",Font.BOLD,14));
-        ayuda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        colecciones.setFont(new Font("Arial",Font.BOLD,14));
-        colecciones.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        eventosYNoticias.setFont(new Font("Arial",Font.BOLD,14));
-        eventosYNoticias.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        sobreNosotros.setFont(new Font("Arial",Font.BOLD,14));
-        sobreNosotros.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        inicioSesion.setFont(new Font("Arial",Font.BOLD,14));
-        inicioSesion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-        //Panel donde se encuentran el icono del admin y el nombre del admin
-        JPanel vertical = new JPanel();
-        vertical.setLayout(new BoxLayout(vertical, BoxLayout.Y_AXIS));
-        vertical.setLayout(new FlowLayout());
-        vertical.setPreferredSize(new Dimension(50, 50));
-        vertical.setBackground(Color.BLACK);
-        vertical.add(inicioSesion);
-        vertical.add(underUser);
-
-        //Panel para agrupar los botones del encabezado
+    private void setupHeaderButtons() {
         JPanel grupoBotones = new JPanel();
         grupoBotones.setBackground(Color.BLACK);
         grupoBotones.setLayout(new BoxLayout(grupoBotones, BoxLayout.X_AXIS));
-        grupoBotones.setPreferredSize(new Dimension(200, 100));
+        grupoBotones.setPreferredSize(new Dimension(700, 100));
+
+        JLabel ayuda = createHeaderButton("Ayuda con...");
+        JLabel colecciones = createHeaderButton("Colecciones");
+        JLabel eventosYNoticias = createHeaderButton("Eventos y Noticias");
+        JLabel sobreNosotros = createHeaderButton("Visitas y Sobre nosotros");
+
         grupoBotones.add(Box.createHorizontalStrut(40));
         grupoBotones.add(ayuda);
         grupoBotones.add(Box.createHorizontalStrut(40));
@@ -85,88 +75,107 @@ public class AdminMainPage {
         grupoBotones.add(Box.createHorizontalStrut(40));
         grupoBotones.add(sobreNosotros);
         grupoBotones.add(Box.createHorizontalStrut(70));
-        grupoBotones.add(vertical);
 
-        //Panel dentro del encabezado donde se mete todo el contenido, los paneles anteriores
+        header.add(grupoBotones, BorderLayout.CENTER);
+    }
+
+    private JLabel createHeaderButton(String text) {
+        JLabel button = new JLabel(text);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return button;
+    }
+
+    private void setupUserPanel() {
+        ImageIcon userLogedIcon = new ImageIcon(("src/Libreria/imagenes/user_icon_white_resize.png"));
+        JLabel inicioSesion = new JLabel(userLogedIcon);
+        JLabel underUser = new JLabel("Admin");
+        underUser.setForeground(Color.WHITE);
+
+        JPanel vertical = new JPanel();
+        vertical.setLayout(new FlowLayout());
+        vertical.setBackground(Color.BLACK);
+        vertical.add(inicioSesion);
+        vertical.add(underUser);
+
+        header.add(vertical, BorderLayout.EAST);
+    }
+
+    private void setupHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(Color.BLACK);
-        headerPanel.add(grupoBotones, BorderLayout.CENTER);
-        headerPanel.add(etiquetaFoto1, BorderLayout.WEST);
-        header.add(headerPanel, BorderLayout.CENTER);
+        headerPanel.add(header, BorderLayout.CENTER);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        frame.add(headerPanel, BorderLayout.NORTH);
+    }
 
-        //Contenido que va dentro del panel "panelEdit"
-        JComboBox<String> comboBox = new JComboBox<>();
-        comboBox.setBounds(50,50,200,30);
-        JTextField direccion = new JTextField();
-        direccion.setBounds(50,100,200,30);
-        JTextField nombre = new JTextField();
-        nombre.setBounds(50,150,200,30);
-        JTextField apellido = new JTextField();
-        apellido.setBounds(50,200,200,30);
-        JTextField correo = new JTextField();
-        correo.setBounds(50,250,200,30);
-        JTextField contraseña = new JTextField();
-        contraseña.setBounds(50,300,200,30);
-        JLabel direccionEtiqueta = new JLabel("Dirección:");
-        direccionEtiqueta.setBounds(50,77,150,30);
-        JLabel nombreEtiqueta = new JLabel("Nombre:");
-        nombreEtiqueta.setBounds(50,127,150,30);
-        JLabel apellidoEtiqueta = new JLabel("Apellido:");
-        apellidoEtiqueta.setBounds(50,177,150,30);
-        JLabel correoEtiqueta = new JLabel("Correo:");
-        correoEtiqueta.setBounds(50,227,150,30);
-        JLabel contraseñaEtiqueta = new JLabel("Contraseña:");
-        contraseñaEtiqueta.setBounds(50,277,150,30);
-        JLabel aceptarEdit = new JLabel("Aceptar cambios");
-        aceptarEdit.setBounds(100,350,150,30);
-
-        //Formatos de las etiquetas
-        direccionEtiqueta.setFont(new Font("Arial",Font.BOLD,14));
-        nombreEtiqueta.setFont(new Font("Arial",Font.BOLD,14));
-        apellidoEtiqueta.setFont(new Font("Arial",Font.BOLD,14));
-        correoEtiqueta.setFont(new Font("Arial",Font.BOLD,14));
-        contraseñaEtiqueta.setFont(new Font("Arial",Font.BOLD,14));
-        aceptarEdit.setFont(new Font("Arial",Font.BOLD,14));
-        aceptarEdit.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-        //Panel de detro del panel "body"
-        JPanel panelEdit = new JPanel();
-        panelEdit.setBounds(300,25,300,400);
-        panelEdit.setLayout(null);
-        panelEdit.add(comboBox);
-        panelEdit.add(correo);
-        panelEdit.add(nombre);
-        panelEdit.add(contraseña);
-        panelEdit.add(aceptarEdit);
-        panelEdit.add(apellido);
-        panelEdit.add(direccion);
-        panelEdit.add(direccionEtiqueta);
-        panelEdit.add(nombreEtiqueta);
-        panelEdit.add(apellidoEtiqueta);
-        panelEdit.add(correoEtiqueta);
-        panelEdit.add(contraseñaEtiqueta);
-
-        //Combox
-        ConexionBD conexionBD = new ConexionBD();
-        AdminManagement adminManagement = new AdminManagement(conexionBD);
-        adminManagement.mostrarUsuarios(comboBox);
-
-
-        //Panel del cuerpo
+    private void setupBody() {
         JPanel body = new JPanel();
-        body.setPreferredSize(new Dimension(700, 500));
+        body.setPreferredSize(new Dimension(900, 500));
         body.setLayout(null);
+
+        panelEdit = createPanelEdit();  // Initialize panelEdit
         body.add(panelEdit);
 
-        //Lineas que rodean el panel "panelEdit"
+        frame.add(body, BorderLayout.CENTER);
+    }
+
+    private JPanel createPanelEdit() {
+        JPanel panelEdit = new JPanel();
+        panelEdit.setBounds(300, 25, 300, 400);
+        panelEdit.setLayout(null);
+
+        comboBox = new JComboBox<>();
+        comboBox.setBounds(50, 50, 200, 30);
+        panelEdit.add(comboBox);
+
+        direccion = createTextField(50, 100);
+        nombre = createTextField(50, 150);
+        apellido = createTextField(50, 200);
+        correo = createTextField(50, 250);
+        contraseña = createTextField(50, 300);
+
+        JLabel direccionEtiqueta = createLabel("Dirección:", 50, 77);
+        JLabel nombreEtiqueta = createLabel("Nombre:", 50, 127);
+        JLabel apellidoEtiqueta = createLabel("Apellido:", 50, 177);
+        JLabel correoEtiqueta = createLabel("Correo:", 50, 227);
+        JLabel contraseñaEtiqueta = createLabel("Contraseña:", 50, 277);
+
+        JLabel aceptarEdit = new JLabel("Aceptar cambios");
+        aceptarEdit.setBounds(100, 350, 150, 30);
+        aceptarEdit.setFont(new Font("Arial", Font.BOLD, 14));
+        aceptarEdit.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panelEdit.add(aceptarEdit);
+
         panelEdit.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED), "Usuarios",
                 TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
 
-        frame.add(header, BorderLayout.NORTH);
-        frame.add(body, BorderLayout.CENTER);
+        return panelEdit;
+    }
 
-        frame.pack();
-        frame.setVisible(true);
+
+    private JTextField createTextField(int x, int y) {
+        JTextField textField = new JTextField();
+        textField.setBounds(x, y, 200, 30);
+        return textField;
+    }
+
+    private JLabel createLabel(String text, int x, int y) {
+        JLabel label = new JLabel(text);
+        label.setBounds(x, y, 150, 30);
+        label.setFont(new Font("Arial", Font.BOLD, 14));
+        return label;
+    }
+
+    private void setupComboBox() {
+        ConexionBD conexionBD = new ConexionBD();
+        AdminManagement adminManagement = new AdminManagement(conexionBD);
+        adminManagement.mostrarUsuarios(comboBox);
+    }
+
+    private void setupAceptarEditListener() {
+        JLabel aceptarEdit = (JLabel) panelEdit.getComponent(6); // Adjust index as needed
         aceptarEdit.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -180,7 +189,6 @@ public class AdminMainPage {
                 if (nuevaDireccion.isEmpty() || nuevoNombre.isEmpty() || nuevosApellidos.isEmpty() || nuevoCorreo.isEmpty() || nuevaContraseña.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Por favor, completa todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    // Llamar al método actualizarUsuario de AdminManagement
                     ConexionBD conexionBD = new ConexionBD();
                     AdminManagement adminManagement = new AdminManagement(conexionBD);
                     adminManagement.actualizarUsuario(selectedUser, nuevaDireccion, nuevoNombre, nuevosApellidos, nuevoCorreo, nuevaContraseña);
@@ -188,7 +196,10 @@ public class AdminMainPage {
             }
         });
     }
-    public static void main(String[] args){
-        AdminMainPage ver = new AdminMainPage();
+
+
+
+    public static void main(String[] args) {
+        new AdminMainPage();
     }
 }
